@@ -3,7 +3,6 @@ import '../css/header.css';
 import { NavLink } from 'react-router-dom'
 
 const selectedStyle = {
-    backgroundColor: "white",
     color: "black"
 }
 

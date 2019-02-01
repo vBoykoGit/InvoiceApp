@@ -19,7 +19,7 @@ const middleware = () => [
 ]
 
 const storeFactory = (initialState = {}) => {
-    const store = applyMiddleware(...middleware())(createStore)(combineReducers(null), initialState);
+    const store = applyMiddleware(...middleware())(createStore)(combineReducers({}), initialState);
     return store
 }
 

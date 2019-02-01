@@ -1,20 +1,25 @@
 import React from 'react';
+import { Navbar, Nav } from 'react-bootstrap'
+import { withRouter } from "react-router-dom";
 import '../css/header.css';
-import { NavLink } from 'react-router-dom'
 
-const selectedStyle = {
-    color: "black"
+const Header = ({ history }) => {
+
+    const onInvoices = () => history.push('/')
+    const onProducts = () => history.push('/products')
+    const onCustomers = () => history.push('/customers')
+
+    return (
+        <Navbar bg="light" variant="light navLink">
+            <Navbar.Brand onClick={onInvoices} >
+                <div className="navBrand">Invoice App</div>
+            </Navbar.Brand>
+            <Nav className="mr-auto">
+                <Nav.Link onClick={onInvoices}>Invoices</Nav.Link>
+                <Nav.Link onClick={onProducts}>Products</Nav.Link>
+                <Nav.Link onClick={onCustomers} >Customers</Nav.Link>
+            </Nav>
+        </Navbar>
+    )
 }
-
-const Header = (props) =>
-    <header className='header'>
-        <nav className='headerContent'>
-            <div className='headerPlanner'>Invoice App</div>
-            <NavLink exact to='/' className='headerNav' activeStyle={selectedStyle}>Invoices</NavLink>
-            <NavLink to='/products' className='headerNav' activeStyle={selectedStyle}>Products</NavLink>
-            <NavLink to='/customers' className='headerNav' activeStyle={selectedStyle}>Customers</NavLink>
-        </nav>
-    </header >
-
-
-export default Header
+export default withRouter(Header)

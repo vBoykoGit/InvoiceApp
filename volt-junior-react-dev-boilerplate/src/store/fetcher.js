@@ -1,7 +1,5 @@
 import fetch from 'isomorphic-fetch'
 
-const apiURL = `http://127.0.0.1:3001`
-
 const parseToJson = response => {
     const json = response.json()
     console.log(json)
@@ -20,7 +18,7 @@ const checkStatus = response => {
 const checkErrors = response => response
 
 export const fetchThenProcess = (path, method, body, headers) =>
-    fetch(`${apiURL}${path}`, {
+    fetch(path, {
         method,
         body,
         headers: {

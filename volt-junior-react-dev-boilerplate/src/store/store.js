@@ -1,6 +1,8 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
+import customers from './reducers/customersReducers';
+import products from './reducers/productsReducers';
 
 let console = window.console;
 
@@ -19,7 +21,7 @@ const middleware = () => [
 ]
 
 const storeFactory = (initialState = {}) => {
-    const store = applyMiddleware(...middleware())(createStore)(combineReducers({}), initialState);
+    const store = applyMiddleware(...middleware())(createStore)(combineReducers({ customers, products }), initialState);
     return store
 }
 

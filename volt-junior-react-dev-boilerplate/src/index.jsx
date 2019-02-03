@@ -4,7 +4,7 @@ import './index.css';
 import { App } from './components/containers/App';
 import { Provider } from "react-redux";
 import storeFactory from './store/store.js'
-import 'react-select/dist/react-select.css';
+// import 'react-select/dist/react-select.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 const store = storeFactory()

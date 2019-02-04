@@ -5,6 +5,7 @@ import { Table, Button, Container, Row, Col } from 'react-bootstrap'
 import CreateCustomer from '../Modals/CreateCustomer.jsx';
 import { withRouter, matchPath } from 'react-router'
 import DeleteModal from '../Modals/DeleteModal.jsx';
+import EditCustomer from '../Modals/EditCustomer.jsx';
 
 class Customers extends Component {
     constructor(props, context) {
@@ -25,13 +26,10 @@ class Customers extends Component {
             showDeleteModal: false,
             showingItem: null,
         });
-        document.title = "Customers";
-        this.props.history.push('/customers')
     }
 
     handleShowCreate = () => {
         this.setState({ showCreateModal: true });
-        document.title = "Create Customer";
     }
 
     handleShowEdit = (showingItem) => {
@@ -39,7 +37,6 @@ class Customers extends Component {
             showEditModal: true,
             showingItem
         });
-        document.title = "Edit Customer";
     }
 
     handleShowDelete = (showingItem) => {
@@ -47,36 +44,39 @@ class Customers extends Component {
             showDeleteModal: true,
             showingItem
         });
-        document.title = "Delete Customer";
+    }
+
+    handleDelete = () => {
+
+        handleClose()
+    }
+
+    handleEdit = (customer) => {
+
+    }
+
+    handleCreate = (customer) => {
+        console.log(customer);
+
     }
 
     componentDidMount() {
         this.props.dispatch(getCustomers())
         document.title = "Customers";
-        const id = matchObject.params.id
-        const user = this.props.customers && this.props.customers.filter((item) => {
-            console.log(item);
-
-            return `${item.id}` === id
-        })
-        console.log(matchObject);
-        console.log(id);
-        console.log(user);
-
-        user ? this.handleShowDelete(user) : null
     }
 
 
     render() {
         return (
             <Container>
-                <DeleteModal show={this.state.showDeleteModal} name={this.state.showingItem} handleClose={this.handleClose} />
+                <DeleteModal show={this.state.showDeleteModal} customer={this.state.showingItem} handleDelete={this.handleDelete} handleClose={this.handleClose} />
+                <EditCustomer show={this.state.showEditModal} customer={this.state.showingItem} handleEdit={this.handleEdit} handleClose={this.handleClose} />
+                <EditCustomer show={this.state.showCreateModal} handleEdit={this.handleCreate} handleClose={this.handleClose} />
                 <Row>
                     <h1>Customers</h1>
                     <Col>
                         <Button variant="outline-dark" onClick={this.handleShowCreate}>Create</Button>
                     </Col>
-                    <CreateCustomer show={this.state.showCreateModal} handleClose={this.handleClose} />
                 </Row>
                 <Row>
                     <Table hover>
@@ -96,10 +96,10 @@ class Customers extends Component {
                                     <td>{item.address}</td>
                                     <td>{item.phone}</td>
                                     <td>
-                                        <Button variant="outline-dark" onClick={() => { this.handleShowEdit(item) }}>edit</Button>
+                                        <Button variant="outline-dark" onClick={() => this.handleShowEdit(item)}>edit</Button>
                                     </td>
                                     <td>
-                                        <Button variant="outline-dark" onClick={() => { this.handleShowDelete(item) }}>delete</Button>
+                                        <Button variant="outline-dark" onClick={() => this.handleShowDelete(item)}>delete</Button>
                                     </td>
                                 </tr>)}
                         </tbody>
@@ -111,10 +111,7 @@ class Customers extends Component {
 }
 
 const mapStateToProps = ({ customers = {} }, { history, location, match }) => ({
-    customers: customers.customers,
-    location,
-    history,
-    match
+    customers: customers.customers
 })
 
 const mapDispatchToProps = dispatch => {

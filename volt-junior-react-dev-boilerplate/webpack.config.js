@@ -40,8 +40,8 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'babel-loader',
       query: {
-        presets: ['es2015', 'react'],
-        plugins: ['transform-object-rest-spread', 'transform-class-properties']
+        presets: ['es2015', 'react', 'env'],
+        plugins: ['transform-object-rest-spread', 'transform-class-properties', 'transform-runtime']
       }
     }, {
       test: /\.css$/,

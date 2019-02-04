@@ -5,7 +5,6 @@ import { InvoicesPage, CustomersPage, ProductsPage } from '../Pages';
 import { history } from '../../historyHelper.js';
 import '../../css/app.css';
 import '../../css/common.css';
-import CreateCustomer from '../CreateCustomer';
 
 class App extends Component {
   componentDidMount() {

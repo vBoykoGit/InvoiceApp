@@ -12,7 +12,7 @@ export function getProducts() {
 }
 
 // export function newOperation(sum) {
-//     return async dispatch => {
+//     return dispatch => {
 //         console.log(sum);
 
 //         dispatch(startLoading())

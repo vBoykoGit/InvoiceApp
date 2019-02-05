@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from "react-redux"
 import { getCustomers } from '../../store/actions/customersActions.js';
 import { Table, Button, Container, Row, Col } from 'react-bootstrap'
-import CreateCustomer from '../Modals/CreateCustomer.jsx';
-import { withRouter, matchPath } from 'react-router'
+import { withRouter } from 'react-router'
 import DeleteModal from '../Modals/DeleteModal.jsx';
 import EditCustomer from '../Modals/EditCustomer.jsx';
+import { createCustomer, editCustomer, deleteCustomer } from '../../store/actions/customersActions';
 
 class Customers extends Component {
     constructor(props, context) {
@@ -47,17 +47,21 @@ class Customers extends Component {
     }
 
     handleDelete = () => {
-
-        handleClose()
+        this.props.dispatch(deleteCustomer(this.state.showingItem))
+        this.handleClose()
     }
 
     handleEdit = (customer) => {
-
+        this.props.dispatch(editCustomer({
+            ...this.state.showingItem,
+            ...customer
+        }))
+        this.handleClose()
     }
 
     handleCreate = (customer) => {
-        console.log(customer);
-
+        this.props.dispatch(createCustomer(customer))
+        this.handleClose()
     }
 
     componentDidMount() {

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap'
 
-const DeleteModal = ({ show = false, customer, handleDelete = f => f, handleClose = f => f }) =>
+const DeleteModal = ({ show = false, object, handleDelete = f => f, handleClose = f => f }) =>
     <Modal show={show} onHide={handleClose} >
         <Modal.Header closeButton>
             <Modal.Title>Delete</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Modal.Title>
-                Do you want to delete{customer !== null && ` ${customer.name}`}?
+                Do you want to delete{object ? ` ${object.name}` : null}?
             </Modal.Title>
         </Modal.Body>
         <Modal.Footer>

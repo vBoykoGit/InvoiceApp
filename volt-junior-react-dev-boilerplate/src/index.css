@@ -5,5 +5,7 @@ body {
   height: 100%;
   font-family: 'Muli', sans-serif;
 }
-.show { opacity: 1; }
 
+.show {
+  opacity: 1;
+}

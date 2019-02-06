@@ -69,11 +69,10 @@ class Customers extends Component {
         document.title = "Customers";
     }
 
-
     render() {
         return (
             <Container>
-                <DeleteModal show={this.state.showDeleteModal} customer={this.state.showingItem} handleDelete={this.handleDelete} handleClose={this.handleClose} />
+                <DeleteModal show={this.state.showDeleteModal} object={this.state.showingItem} handleDelete={this.handleDelete} handleClose={this.handleClose} />
                 <EditCustomer show={this.state.showEditModal} customer={this.state.showingItem} handleEdit={this.handleEdit} handleClose={this.handleClose} />
                 <EditCustomer show={this.state.showCreateModal} handleEdit={this.handleCreate} handleClose={this.handleClose} />
                 <Row>

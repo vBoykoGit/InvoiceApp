@@ -3,33 +3,42 @@ import { connect } from "react-redux"
 import { Table, Button, Container, Row, Col } from 'react-bootstrap'
 import CreateInvoice from '../Modals/CreateInvoice.jsx';
 import { withRouter } from 'react-router'
-
+import { getInvoices } from '../../store/actions/invoicesActions';
 
 class Invoices extends Component {
     constructor(props, context) {
         super(props, context);
 
         this.state = {
-            showModal: false,
+            showDeleteModal: false,
+            showingItem: null,
         };
     }
 
     handleClose = () => {
-        this.setState({ showModal: false });
-        document.title = "Invoices";
-        this.props.history.push('/')
+        this.setState({
+            showDeleteModal: false,
+            showingItem: null,
+        });
     }
 
-    handleShow = () => {
-        this.setState({ showModal: true });
-        document.title = "Create Invoice";
-        this.props.history.push('/c/ccc')
+    handleShowDelete = (showingItem) => {
+        this.setState({
+            showDeleteModal: true,
+            showingItem
+        });
+    }
+
+    handleDelete = () => {
+        this.props.dispatch(deleteCustomer(this.state.showingItem))
+        this.handleClose()
     }
 
     componentDidMount() {
+        this.props.dispatch(getInvoices())
         document.title = "Invoices";
-        if (this.props.location.pathname === '/c/ccc') this.setState({ showModal: true })
     }
+
     render() {
         return (
             <Container>
@@ -59,6 +68,9 @@ class Invoices extends Component {
                                     <td>{item.price}</td>
                                     <td>{item.price}</td>
                                     <td>{item.price}</td>
+                                    <td>
+                                        <Button variant="outline-dark" onClick={() => this.handleShowDelete(item)}>delete</Button>
+                                    </td>
                                 </tr>)}
                         </tbody>
                     </Table>

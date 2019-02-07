@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
-import { getCustomers } from '../../store/actions/customersActions.js';
 import { Table, Button, Container, Row, Col } from 'react-bootstrap'
 import { withRouter } from 'react-router'
 import DeleteModal from '../Modals/DeleteModal.jsx';
 import EditCustomer from '../Modals/EditCustomer.jsx';
-import { createCustomer, editCustomer, deleteCustomer } from '../../store/actions/customersActions';
+import { getCustomers, createCustomer, editCustomer, deleteCustomer } from '../../store/actions/customersActions';
 
 class Customers extends Component {
     constructor(props, context) {

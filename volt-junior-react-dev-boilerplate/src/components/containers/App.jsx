@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 import { Router, Route, Switch } from 'react-router-dom'
-import { InvoicesPage, CustomersPage, ProductsPage } from '../Pages';
+import { InvoicesPage, CustomersPage, ProductsPage, EditInvoicePage } from '../Pages';
 import { history } from '../../historyHelper.js';
 import '../../css/app.css';
 import '../../css/common.css';
@@ -16,6 +16,7 @@ class App extends Component {
         <Router history={history}>
           <Switch>
             <Route exact path="/" component={InvoicesPage} />
+            <Route path="/invoices/:id/edit" component={EditInvoicePage} />
             <Route path="/customers" component={CustomersPage} />
             <Route path="/products" component={ProductsPage} />
           </Switch>

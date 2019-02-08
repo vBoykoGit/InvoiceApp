@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux"
 import { Table, Button, Container, Row, Col } from 'react-bootstrap'
-import { withRouter } from 'react-router'
 import DeleteModal from '../Modals/DeleteModal.jsx';
 import EditCustomer from '../Modals/EditCustomer.jsx';
 import { getCustomers, createCustomer, editCustomer, deleteCustomer } from '../../store/actions/customersActions';
 
 class Customers extends Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             showCreateModal: false,
@@ -112,7 +111,7 @@ class Customers extends Component {
     }
 }
 
-const mapStateToProps = ({ customers = {} }, { history, location, match }) => ({
+const mapStateToProps = ({ customers = {} }) => ({
     customers: customers.customers
 })
 
@@ -122,5 +121,5 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-const connectedCustomers = withRouter(connect(mapStateToProps, mapDispatchToProps)(Customers))
+const connectedCustomers = connect(mapStateToProps, mapDispatchToProps)(Customers)
 export { connectedCustomers as Customers }

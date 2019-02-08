@@ -17,9 +17,10 @@ const invoices = (state = initialState, action = {
             const { invoice } = action
             const { invoices } = state
 
+            const newInvoices = invoices ? [...invoices, invoice] : [invoice]
             return {
                 ...state,
-                invoices: [...invoices, invoice]
+                invoices: newInvoices
             };
         }
         case invoicesConstants.EDIT: {

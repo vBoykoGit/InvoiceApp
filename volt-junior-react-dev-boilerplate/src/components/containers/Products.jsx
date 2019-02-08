@@ -11,8 +11,8 @@ import DeleteModal from '../Modals/DeleteModal.jsx';
 import EditProduct from '../Modals/EditProduct';
 
 class Products extends Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
 
         this.state = {
             showCreateModal: false,

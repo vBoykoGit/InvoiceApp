@@ -1,6 +1,6 @@
 export const invoicesConstants = {
-    SET: 'SET_INVOICE',
-    ADD: 'ADD_INVOICE',
-    EDIT: 'EDIT_INVOICE',
-    DELETE: 'DELETE_INVOICE'
+    SET: 'SET_INVOICES',
+    ADD: 'ADD_INVOICES',
+    EDIT: 'EDIT_INVOICES',
+    DELETE: 'DELETE_INVOICES'
 };

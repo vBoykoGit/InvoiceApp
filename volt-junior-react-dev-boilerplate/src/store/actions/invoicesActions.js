@@ -16,16 +16,30 @@ export function getInvoices() {
     }
 }
 
-export function createInvoices(invoices) {
+export function getInvoice(id) {
     return dispatch => {
-        fetchThenProcess('/api/invoices', 'POST', JSON.stringify(invoices))
-            .then((response) => dispatch(addInvoices(response)))
+        fetchThenProcess(`/api/invoices/${id}`, 'GET')
+            .then((response) => dispatch(setInvoice(response)))
     };
 
-    function addInvoices(invoices) {
+    function setInvoice(invoice) {
         return {
             type: invoicesConstants.ADD,
-            invoices
+            invoice
+        }
+    }
+}
+
+export function createInvoice() {
+    return dispatch => {
+        fetchThenProcess('/api/invoices', 'POST')
+            .then((response) => dispatch(addInvoice(response)))
+    };
+
+    function addInvoice(invoice) {
+        return {
+            type: invoicesConstants.ADD,
+            invoice
         }
     }
 }
@@ -44,16 +58,16 @@ export function editInvoices(invoices) {
     }
 }
 
-export function deleteInvoices(invoices) {
+export function deleteInvoice(invoice) {
     return dispatch => {
-        fetchThenProcess(`/api/invoices/${invoices.id}`, 'DELETE', JSON.stringify(invoices))
+        fetchThenProcess(`/api/invoices/${invoice.id}`, 'DELETE')
             .then((response) => dispatch(deleteInvoices(response)))
     };
 
-    function deleteInvoices(invoices) {
+    function deleteInvoices(invoice) {
         return {
             type: invoicesConstants.DELETE,
-            invoices
+            invoice
         }
     }
 }

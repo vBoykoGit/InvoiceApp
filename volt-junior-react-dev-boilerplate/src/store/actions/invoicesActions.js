@@ -16,20 +16,6 @@ export function getInvoices() {
     }
 }
 
-export function getInvoice(id) {
-    return dispatch => {
-        fetchThenProcess(`/api/invoices/${id}`, 'GET')
-            .then((response) => dispatch(setInvoice(response)))
-    };
-
-    function setInvoice(invoice) {
-        return {
-            type: invoicesConstants.ADD,
-            invoice
-        }
-    }
-}
-
 export function createInvoice() {
     return dispatch => {
         fetchThenProcess('/api/invoices', 'POST')

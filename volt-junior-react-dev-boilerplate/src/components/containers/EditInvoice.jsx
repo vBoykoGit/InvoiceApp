@@ -5,65 +5,97 @@ import { connect } from "react-redux"
 import { withRouter, matchPath } from 'react-router'
 import { getProducts } from '../../store/actions/productsActions';
 import { getCustomers } from '../../store/actions/customersActions';
-import { getInvoice } from '../../store/actions/invoicesActions';
+import {
+    getInvoice,
+    addProductItem,
+    getInvoiceItems,
+    deleteInvoiceItem
+} from '../../store/actions/invoiceActions';
+import DeleteModal from '../Modals/DeleteModal';
 
 class EditInvoice extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            customer: null,
-            product: null,
-            discount: ''
+            showDeleteModal: false,
+            showingItem: null,
+            product: null
         };
     }
 
-    componentDidMount() {
-        this.props.onLoadData()
-        const { customers, products, invoices = [], history, location, match } = stateProps;
-        const { onLoadData, onLoadInvoice } = dispatchProps;
+    handleClose = () => {
+        this.setState({
+            showDeleteModal: false,
+            showingItem: null,
+        });
+    }
 
+    handleShowDelete = (showingItem) => {
+        this.setState({
+            showDeleteModal: true,
+            showingItem
+        });
+    }
+
+    handleDelete = () => {
+        const { invoice, onDeleteProductItem } = this.props
+        const { showingItem } = this.state
+
+        onDeleteProductItem(invoice, showingItem)
+        this.handleClose()
+    }
+
+    editOnChange = (newProps) => {
+        this.props.onEdit({
+            ...this.props.invoice,
+            ...newProps
+        })
+    }
+
+    componentDidMount() {
+        const { onLoadInvoiceData, location } = this.props;
         const matchObj = matchPath(
             location.pathname,
             '/invoices/:id/edit'
         );
         const id = matchObj.params.id
-        const [invoice] = invoices.filter(item => item.id === id)
-
-        if (invoice == null) {
-            onLoadInvoice(id)
-        }
+        onLoadInvoiceData(id)
+        document.title = "Edit Invoice";
     }
 
     render() {
-        const { customer, product, discount } = this.state
-        const { customers, products, invoice } = this.props
-        console.log(this.state);
+        const { customers, products, invoice = {}, items, onAddProduct } = this.props
+        const { product } = this.state
+        const { discount, customer_id } = invoice
+        const customer = customers && customer_id ? customers.filter(item => item.id === customer_id) : null
+
         console.log(this.props);
 
         return (
             <Container>
+                <DeleteModal show={this.state.showDeleteModal} handleDelete={this.handleDelete} handleClose={this.handleClose} />
                 <Form id="invoiceForm" >
                     <Form.Row>
                         <Form.Group as={Col} md="4">
                             <Form.Label>Discount</Form.Label>
-                            <Form.Control required value={invoice ? invoice.discount : discount} type="text" placeholder="Discount" onChange={(event) => this.setState({ discount: Number(event.target.value) })} />
+                            <Form.Control required disabled={invoice ? false : true} value={discount ? discount : ''} type="text" placeholder="Discount" onChange={(event) => this.editOnChange({ discount: Number(event.target.value) })} />
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} md="6">
                             <Form.Label>Customer</Form.Label>
-                            <Select value={invoice ? invoice.customer : customer} options={customers} getOptionLabel={customer => customer.name} onChange={(customer) => this.setState({ customer })} />
+                            <Select isDisabled={invoice ? false : true} value={customer} options={customers} getOptionLabel={customer => customer.name} onChange={(customer) => this.props.onChangeCustomer(invoice, customer)} />
                         </Form.Group>
-                    </Form.Row>s
+                    </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} md="4">
                             <Form.Label>Add product</Form.Label>
-                            <Select options={products} getOptionLabel={product => product.name} onChange={(product) => this.setState({ product })} />
+                            <Select isDisabled={invoice ? false : true} value={product} options={products} getOptionLabel={product => product.name} onChange={(product) => this.setState({ product })} />
                         </Form.Group>
                         <Form.Group as={Col} md="1">
-                            <Button variant="outline-dark" onClick={() => {
-                                onAddItem(product)
+                            <Button variant="outline-dark" disabled={invoice ? false : true} onClick={() => {
+                                onAddProduct(invoice, product)
                             }}>Add</Button>
                         </Form.Group>
                     </Form.Row>
@@ -77,12 +109,13 @@ class EditInvoice extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {invoice && invoice.items.map((item, index) =>
+                                {items && items.map((item, index) =>
                                     <tr key={item.id}>
                                         <td>{item.name}</td>
                                         <td>{item.price}</td>
                                         <td>
-                                            <Form.Control required value={invoice ? invoice.discount : discount} type="text" placeholder="Qty" onChange={(event) => this.setState({ discount: event.target.value })} /></td>
+                                            {/* <Form.Control required value={invoice ? invoice.discount : discount} type="text" placeholder="Qty" onChange={(event) => this.setState({ discount: event.target.value })} /> */}
+                                        </td>
                                         <td>
                                             <Button variant="outline-dark" onClick={() => this.handleShowDelete(item)}>delete</Button>
                                         </td>
@@ -97,52 +130,40 @@ class EditInvoice extends React.Component {
     }
 }
 
-const mapStateToProps = ({ customers = {}, products = {}, invoices = {} }, { history, location, match }) => ({
+const mapStateToProps = ({ customers = {}, products = {}, invoice = {} }, { history, location }) => ({
     customers: customers.customers,
     products: products.products,
-    invoices: invoices.invoices,
+    invoice: invoice.invoice,
+    items: invoice.items,
+    customer: invoice.customer,
     history,
-    location,
-    match
+    location
 })
 
 const mapDispatchToProps = dispatch => ({
-    onLoadData() {
+    onLoadInvoiceData(id) {
         dispatch(getProducts())
         dispatch(getCustomers())
-    },
-    onLoadInvoice(id) {
         dispatch(getInvoice(id))
+        dispatch(getInvoiceItems(id))
     },
-    onAddItem(item) {
-
+    onAddProduct(invoice, item) {
+        dispatch(addProductItem(invoice, item))
     },
     onEdit(invoice) {
-
+        dispatch(editInvoice(invoice))
+    },
+    onChangeCustomer(invoice, customer) {
+        const newInvoice = {
+            ...invoice,
+            customer_id: customer.id
+        }
+        dispatch(editInvoice(newInvoice))
+    },
+    onDeleteProductItem(invoice, item) {
+        dispatch(deleteInvoiceItem(invoice, item))
     }
 })
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-    const { customers, products, invoices = [], history, location, match } = stateProps;
-    const { onLoadData, onLoadInvoice } = dispatchProps;
-
-    const matchObj = matchPath(
-        location.pathname,
-        '/invoices/:id/edit'
-    );
-    const id = matchObj.params.id
-    const [invoice] = invoices.filter(item => item.id === id)
-
-    if (invoice == null) {
-        onLoadInvoice(id)
-    }
-    return {
-        invoice,
-        customers,
-        products,
-        onLoadData,
-        history
-    };
-};
-const connectedEditInvoice = withRouter(connect(mapStateToProps, mapDispatchToProps, mergeProps)(EditInvoice))
+const connectedEditInvoice = withRouter(connect(mapStateToProps, mapDispatchToProps)(EditInvoice))
 export { connectedEditInvoice as EditInvoice }

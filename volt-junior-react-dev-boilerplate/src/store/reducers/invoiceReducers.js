@@ -6,20 +6,36 @@ const invoice = (state = initialState, action = {
     type: null
 }) => {
     switch (action.type) {
-        case invoiceConstants.SET: {
+        case invoiceConstants.SET_INVOICE: {
             const { invoice } = action
             return {
                 ...state,
                 invoice
             };
         }
-        case invoiceConstants.EDIT: {
-            const { invoice } = action
-            const { invoices } = state
-            const editedInvoices = invoices.map((item) => item.id === invoice.id ? invoice : item)
+        case invoiceConstants.SET_PRODUCT_ITEMS: {
+            const { items } = action
             return {
                 ...state,
-                invoices: editedInvoices
+                items
+            };
+        }
+        case invoiceConstants.ADD_PRODUCT_ITEM: {
+            const { item } = action
+            const { items } = state
+            const newItems = items ? [...items, item] : [item]
+            return {
+                ...state,
+                items: newItems
+            };
+        }
+        case invoiceConstants.DELETE_PRODUCT_ITEM: {
+            const { item } = action
+            const { items } = state
+            const newItems = items.filter(i => i.id !== item.id)
+            return {
+                ...state,
+                items: newItems
             };
         }
         default:

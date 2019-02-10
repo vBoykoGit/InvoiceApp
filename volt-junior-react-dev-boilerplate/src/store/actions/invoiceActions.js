@@ -7,27 +7,13 @@ export function getInvoice(id) {
         fetchThenProcess(`/api/invoices/${id}`, 'GET')
             .then((response) => dispatch(setInvoice(response)))
     };
-
-    function setInvoice(invoice) {
-        return {
-            type: invoiceConstants.SET_INVOICE,
-            invoice
-        }
-    }
 }
 
 export function editInvoice(invoice) {
-    return (dispatch, getState) => {
+    return dispatch => {
         fetchThenProcess(`/api/invoices/${invoice.id}`, 'PUT', JSON.stringify(invoice))
             .then((response) => dispatch(setInvoice(response)))
     };
-
-    function setInvoice(invoice) {
-        return {
-            type: invoiceConstants.SET_INVOICE,
-            invoice
-        }
-    }
 }
 
 export function getInvoiceItems(id) {
@@ -35,13 +21,6 @@ export function getInvoiceItems(id) {
         fetchThenProcess(`/api/invoices/${id}/items`, 'GET')
             .then((response) => dispatch(setInvoiceItems(response)))
     };
-
-    function setInvoiceItems(items) {
-        return {
-            type: invoiceConstants.SET_PRODUCT_ITEMS,
-            items
-        }
-    }
 }
 
 export function addProductItem(invoice, product) {
@@ -49,10 +28,10 @@ export function addProductItem(invoice, product) {
         fetchThenProcess(`/api/invoices/${invoice.id}/items`, 'POST', JSON.stringify({
             invoice_id: invoice.id,
             product_id: product.id
-        })).then((response) => dispatch(addProductItem(invoice, response)))
+        })).then((response) => dispatch(addProductItem(response)))
     };
 
-    function addProductItem(invoice, item) {
+    function addProductItem(item) {
         return {
             type: invoiceConstants.ADD_PRODUCT_ITEM,
             item
@@ -60,9 +39,16 @@ export function addProductItem(invoice, product) {
     }
 }
 
-export function deleteInvoiceItem(invoice, item) {
+export function changeItemQuantity(item) {
     return dispatch => {
-        fetchThenProcess(`/api/invoices/${invoice.id}/items/${item.id}`, 'DELETE')
+        fetchThenProcess(`/api/invoices/${item.invoice_id}/items/${item.id}`, 'PUT', JSON.stringify(item))
+            .then((response) => dispatch(setInvoiceItem(response)))
+    };
+}
+
+export function deleteInvoiceItem(item) {
+    return dispatch => {
+        fetchThenProcess(`/api/invoices/${item.invoice_id}/items/${item.id}`, 'DELETE')
             .then((response) => dispatch(deleteInvoiceItem(response)))
     };
 
@@ -71,5 +57,26 @@ export function deleteInvoiceItem(invoice, item) {
             type: invoiceConstants.DELETE_PRODUCT_ITEM,
             item
         }
+    }
+}
+
+function setInvoiceItems(items) {
+    return {
+        type: invoiceConstants.SET_PRODUCT_ITEMS,
+        items
+    }
+}
+
+function setInvoiceItem(item) {
+    return {
+        type: invoiceConstants.SET_PRODUCT_ITEM,
+        item
+    }
+}
+
+function setInvoice(invoice) {
+    return {
+        type: invoiceConstants.SET_INVOICE,
+        invoice
     }
 }

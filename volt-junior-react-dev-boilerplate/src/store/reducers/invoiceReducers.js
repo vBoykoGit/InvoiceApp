@@ -20,6 +20,15 @@ const invoice = (state = initialState, action = {
                 items
             };
         }
+        case invoiceConstants.SET_PRODUCT_ITEM: {
+            const { item } = action
+            const { items } = state
+            const newItems = items.map(i => i.id === item.id ? item : i)
+            return {
+                ...state,
+                items: newItems
+            };
+        }
         case invoiceConstants.ADD_PRODUCT_ITEM: {
             const { item } = action
             const { items } = state

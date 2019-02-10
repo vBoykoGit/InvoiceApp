@@ -3,8 +3,9 @@ import { connect } from "react-redux"
 import { Table, Button, Container, Row, Col } from 'react-bootstrap'
 import { withRouter } from 'react-router'
 import { getInvoices, deleteInvoice, createInvoice } from '../../store/actions/invoicesActions';
-import { Link } from 'react-router-dom'
 import DeleteModal from '../Modals/DeleteModal';
+import InvoiceCell from '../InvoiceCell';
+import { getCustomers } from '../../store/actions/customersActions';
 
 class Invoices extends Component {
     constructor(props) {
@@ -41,7 +42,7 @@ class Invoices extends Component {
     }
 
     render() {
-        const { onCreate, invoices } = this.props
+        const { onCreate, invoices, customers } = this.props
 
         return (
             <Container>
@@ -64,19 +65,7 @@ class Invoices extends Component {
                         </thead>
                         <tbody>
                             {invoices && invoices.map((item, index) =>
-                                <tr key={item.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.price}</td>
-                                    <td>{item.price}</td>
-                                    <td>{item.price}</td>
-                                    <td>
-                                        <Link to={`/invoices/${item.id}/edit`}>edit</Link>
-                                    </td>
-                                    <td>
-                                        <Button variant="outline-dark" onClick={() => this.handleShowDelete(item)}>delete</Button>
-                                    </td>
-                                </tr>)}
+                                <InvoiceCell key={item.id} index={index} invoice={item} customers={customers} onDelete={() => this.handleShowDelete(item)} />)}
                         </tbody>
                     </Table>
                 </Row>
@@ -85,8 +74,9 @@ class Invoices extends Component {
     }
 }
 
-const mapStateToProps = ({ invoices = {} }, { history, location }) => ({
+const mapStateToProps = ({ invoices = {}, customers }, { history, location }) => ({
     invoices: invoices.invoices,
+    customers: customers.customers,
     location,
     history
 })
@@ -94,6 +84,7 @@ const mapStateToProps = ({ invoices = {} }, { history, location }) => ({
 const mapDispatchToProps = dispatch =>
     ({
         onLoadData() {
+            dispatch(getCustomers())
             dispatch(getInvoices())
         },
         onCreate() {

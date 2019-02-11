@@ -72,10 +72,6 @@ class EditInvoice extends React.Component {
         const { product } = this.state
         const { discount, customer_id, total } = invoice
         const customer = customers && customer_id ? customers.filter(item => item.id === customer_id) : null
-
-        console.log(this.props);
-        console.log(this.state);
-
         return (
             <Container>
                 <DeleteModal show={this.state.showDeleteModal}

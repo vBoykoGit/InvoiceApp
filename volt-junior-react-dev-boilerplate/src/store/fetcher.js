@@ -2,7 +2,6 @@ import fetch from 'isomorphic-fetch'
 
 const parseToJson = response => {
     const json = response.json()
-    console.log(json)
     return json
 }
 
